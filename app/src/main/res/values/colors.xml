@@ -3,4 +3,9 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
+    <color name="TextColorPrimary">#000000</color>
+
+    <color name="justBlack">#FF000000</color>
+    <color name="justWhite">#FFFFFFFF</color>
+    <color name="justWhiteTrans50">#88FFFFFF</color>
 </resources>

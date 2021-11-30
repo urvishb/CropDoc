@@ -9,6 +9,7 @@ import android.content.pm.ActivityInfo
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
+import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
 import android.util.Log
@@ -16,15 +17,29 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import android.view.Gravity
 import android.widget.Button
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
+
+import isomora.com.greendoctor.models.Posts
+import isomora.com.greendoctor.models.Users
 import kotlinx.android.synthetic.main.activity_main.*;
+import kotlinx.android.synthetic.main.item_post.*
 import java.io.IOException
 
 private const val TAG = "MainActivity"
 private const val PICK_PHOTO_CODE = 1234
 
 class MainActivity : AppCompatActivity() {
+    private var uri: Uri? = null
+    private var results: Classifier.Recognition? = null
     private lateinit var mClassifier: Classifier
     private lateinit var mBitmap: Bitmap
+    private lateinit var firestoreDb: FirebaseFirestore
+    private lateinit var storageRef: StorageReference
+    private var constUser: Users? = null
+
 
 
     private val mCameraRequestCode = 0
@@ -44,6 +59,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         mClassifier = Classifier(assets, mModelPath, mLabelPath, mInputSize)
 
+        storageRef = FirebaseStorage.getInstance().reference
+        firestoreDb = FirebaseFirestore.getInstance()
         resources.assets.open(mSamplePath).use {
             mBitmap = BitmapFactory.decodeStream(it)
             mBitmap = Bitmap.createScaledBitmap(mBitmap, mInputSize, mInputSize, true)
@@ -67,19 +84,61 @@ class MainActivity : AppCompatActivity() {
                 startActivityForResult(imagePickerIntent, PICK_PHOTO_CODE)
             }
 
-//            val callGalleryIntent = Intent(Intent.ACTION_PICK)
-//            callGalleryIntent.type = "image/*"
-//            startActivityForResult(callGalleryIntent, mGalleryRequestCode)
         }
         mDetectButton.setOnClickListener {
-                val results = mClassifier.recognizeImage(mBitmap).firstOrNull()
+                results = mClassifier.recognizeImage(mBitmap).firstOrNull()
                 mResultTextView.text= results?.title+"\n Confidence:"+results?.confidence
 
         }
 
-        askBtn.setOnClickListener {
+
+
+        postBtn.setOnClickListener {
             val intent = Intent(this, AskActivity::class.java)
             startActivity(intent);
+        }
+
+        askBtn.setOnClickListener {
+            askBtn.isEnabled = false
+            if(uri == null) {
+                Toast.makeText(this, "No Image Selected", Toast.LENGTH_SHORT).show()
+                askBtn.isEnabled = true
+                return@setOnClickListener
+            }
+            if(results?.title == "Default image set now…"){
+                Toast.makeText(this, "Please Detect Disease first", Toast.LENGTH_SHORT).show()
+                askBtn.isEnabled = true
+                return@setOnClickListener
+            }
+
+            val photoReference = storageRef.child("images/${System.currentTimeMillis()}--photo.jpg")
+
+            photoReference.putFile(uri!!)
+                .continueWithTask { photoUploadTask ->
+                    photoReference.downloadUrl
+                }.continueWithTask { downloadUrlTask ->
+                    val post = Posts (
+                        results?.title.toString(),
+                        downloadUrlTask.result.toString(),
+                        System.currentTimeMillis(),
+                        constUser
+                        )
+                    firestoreDb.collection("posts").add(post)
+
+                }.addOnCompleteListener { postCreationTask ->
+                    askBtn.isEnabled = true
+                    if (!postCreationTask.isSuccessful) {
+                        Log.e(TAG, "Exception during firebase operations", postCreationTask.exception)
+                        Toast.makeText(this, "Failed to save post", Toast.LENGTH_SHORT).show()
+                    }
+
+                    Toast.makeText(this, "Uploaded Successfully!", Toast.LENGTH_SHORT).show()
+                    val intent = Intent(this, AskActivity::class.java)
+                    startActivity(intent);
+                    finish()
+                }
+
+
         }
 
 
@@ -102,7 +161,7 @@ class MainActivity : AppCompatActivity() {
             }
         } else if(requestCode == PICK_PHOTO_CODE) { // changing mGalleryRequestCode to PICK_PHOTO_CODE
             if (data != null) {
-                val uri = data.data
+                uri = data.data
 
                 try {
                     mBitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, uri)
@@ -120,6 +179,8 @@ class MainActivity : AppCompatActivity() {
 
         }
     }
+
+
 
 
     fun scaleImage(bitmap: Bitmap?): Bitmap {
