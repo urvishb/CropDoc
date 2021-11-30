@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/frameLayout"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:background="@color/justBlack"
+        android:layout_height="match_parent"
+        tools:context=".StoryActivity">
+
+    <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/storyImage"
+            />
+
+
+    <View
+            android:layout_marginTop="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:background="@color/justWhiteTrans50"/>
+    <View
+            android:id="@+id/progressView"
+            android:scaleX="0"
+            android:layout_marginTop="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:background="@color/justWhite"/>
+
+
+
+    <TextView
+            android:id="@+id/eventLocation"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@color/justWhite"
+            android:layout_marginTop="30dp"
+            android:text="@string/location"
+            />
+    <TextView
+            android:layout_marginTop="54dp"
+            android:gravity="center"
+            android:id="@+id/eventTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/x_time_ago"
+            android:textColor="@color/justWhite"
+            android:textSize="16sp"
+            />
+
+
+
+
+
+</FrameLayout>

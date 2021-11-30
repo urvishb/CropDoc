@@ -1,0 +1,76 @@
+{
+  "project_info": {
+    "project_number": "684939122136",
+    "project_id": "college-updates-2f59f",
+    "storage_bucket": "college-updates-2f59f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:684939122136:android:bbca2bc0ab68d7a4720ead",
+        "android_client_info": {
+          "package_name": "com.example.collegeupdates"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "684939122136-mjtpnr8e2pl9o8o9acndk51ghrvemu8l.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.collegeupdates",
+            "certificate_hash": "2324e1950b65630b3bb535177ce841a68bb20dc2"
+          }
+        },
+        {
+          "client_id": "684939122136-v1ja2dqg6fhmjpfqinqvdtmidmpmppmo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAMAtOzKba6x3NMeTSWECi-UQXjMdU_RkU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "684939122136-v1ja2dqg6fhmjpfqinqvdtmidmpmppmo.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:684939122136:android:6043094c1c02edf8720ead",
+        "android_client_info": {
+          "package_name": "isomora.com.greendoctor"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "684939122136-v1ja2dqg6fhmjpfqinqvdtmidmpmppmo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAMAtOzKba6x3NMeTSWECi-UQXjMdU_RkU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "684939122136-v1ja2dqg6fhmjpfqinqvdtmidmpmppmo.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
